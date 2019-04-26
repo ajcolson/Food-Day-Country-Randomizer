@@ -1,0 +1,28 @@
+body{
+  background: url('../images/food.png') repeat;
+  font-family: 'PT Mono', monospace;
+  color: #030303CC;
+}
+
+#app-main--outer-box{
+  background: #FFFFFF99;
+  border-radius: 10px;
+  min-height: 200px;
+  padding: 10px;
+}
+
+#app-main--inner-box{
+  background: #FFFFFFEE;
+  min-height: 200px;
+  border-radius: 5px;
+  padding:5px;
+}
+
+h1{
+  text-align: center;
+}
+.logo-img{
+  width: 96px;
+  height: 96px;
+  vertical-align: middle;
+}
