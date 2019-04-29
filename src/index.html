@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
     <link rel="stylesheet" href="./res/mdl/material.min.css">
-    <link rel="stylesheet" href=".res/mdl/material.blue-red.min.css" />
+    <link rel="stylesheet" href="./res/mdl/material.blue-red.min.css" />
     <link rel="stylesheet" href="./res/css/style.css">
     <script src="./res/mdl/material.min.js"></script>
   </head>
@@ -26,7 +26,28 @@
               <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="number-of-countries-input">
               <label class="mdl-textfield__label" for="number-of-countries-input">Number of</label>
               <span class="mdl-textfield__error">Not a Number!</span>
-            </div> countries.
+            </div> countries on the following date:
+            <button id="month-selector-btn" class="mdl-button mdl-js-button mdl-js-ripple-effect"><span id="month-selector-btn-text">Month</span><i class="material-icons">arrow_drop_down</i></button>
+            <ul id="month-selector-list" class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="month-selector-btn">
+              <li class="mdl-menu__item" data-month="0">Month</li>
+              <li class="mdl-menu__item" data-month="1">January</li>
+              <li class="mdl-menu__item" data-month="2">February</li>
+              <li class="mdl-menu__item" data-month="3">March</li>
+              <li class="mdl-menu__item" data-month="4">April</li>
+              <li class="mdl-menu__item" data-month="5">May</li>
+              <li class="mdl-menu__item" data-month="6">June</li>
+              <li class="mdl-menu__item" data-month="7">July</li>
+              <li class="mdl-menu__item" data-month="8">August</li>
+              <li class="mdl-menu__item" data-month="9">September</li>
+              <li class="mdl-menu__item" data-month="10">October</li>
+              <li class="mdl-menu__item" data-month="11">November</li>
+              <li class="mdl-menu__item" data-month="12">December</li>
+            </ul>
+            <div id="year-selector-container" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" pattern="[0-9]{4,}" id="year-selector-input">
+              <label class="mdl-textfield__label" for="year-selector-input">Year</label>
+              <span class="mdl-textfield__error">Invalid Year!</span>
+            </div>
             <br>
             <br>
             <button id="go-btn" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" disabled>Go</button>
@@ -41,43 +62,14 @@
     <script src="./res/js/country_lists.js"></script>
     <script src="./res/js/prng.js"></script>
     <script>
-    document.querySelector("#go-btn").addEventListener("click", (e) => {
-      e.preventDefault()
-      
-      clearResults()
-      document.querySelector("#go-btn").disabled = true
-      document.querySelector("#loading-spinner").classList.add("is-active")
+    /** Global Vars **/
+    var CURRENT_SELECTED_MONTH = 0
 
-      var numCountries = Math.floor(document.querySelector("#number-of-countries-input").value)
-      var countries = []
-      var prng = new Math.seedrandom("This is a test seed.")  
-
-      setTimeout(function(){
-        for (var i = 0; i < numCountries; i++){
-          var nextCountryIndex = Math.abs(prng.int32()) % ALL_COUNTRIES.length
-          countries.push(ALL_COUNTRIES[nextCountryIndex])
-        }
-        showResults(countries)
-
-        document.querySelector("#go-btn").disabled = false
-        document.querySelector("#loading-spinner").classList.remove("is-active")
-      },500)
-    })
-    document.querySelector("#number-of-countries-input").addEventListener("input", (e) => {
-      var val = document.querySelector("#number-of-countries-input").value
-      var isNum = val == "" || isNaN(val)
-      document.querySelector("#go-btn").disabled = isNum
-    })
-    document.querySelector("#clear-btn").addEventListener("click", (e) => {
-      e.preventDefault()
-      clearResults()
-    })
-
+    /** Helper Functions **/
     function clearResults(){
       document.querySelector("#country-output-list").innerHTML = ""
       document.querySelector("#clear-btn").disabled = true
     }
-
     function showResults(locations){
       outString = ""
       for (var ind in locations){
@@ -93,6 +85,112 @@
       document.querySelector("#country-output-list").innerHTML = outString
       document.querySelector("#clear-btn").disabled = false
     }
+    function validateForm(){
+      var countriesCountEntered = document.querySelector("#number-of-countries-input").value
+      var isCountriesEnteredValid = countriesCountEntered == "" || isNaN(countriesCountEntered)
+
+      var yearEntered = document.querySelector("#year-selector-input").value
+      var isYearEnteredValid = yearEntered == "" || isNaN(yearEntered) || yearEntered < 1000
+
+      var isMonthSelectedValid = (CURRENT_SELECTED_MONTH > 0) && (CURRENT_SELECTED_MONTH < 13)
+
+      var isFormValid = isCountriesEnteredValid && isYearEnteredValid && isMonthSelectedValid
+
+      document.querySelector("#go-btn").disabled = isFormValid
+    }
+
+    /** Main App Logic **/    
+    document.querySelector("#number-of-countries-input").addEventListener("input", (e) => {
+      validateForm()
+      clearResults()
+    })
+    document.querySelector("#year-selector-input").addEventListener("input",  (e) =>{ 
+      validateForm()
+      clearResults()
+    })
+
+    var monthSelectorItems = document.querySelectorAll("#month-selector-list .mdl-menu__item")
+    Array.from(monthSelectorItems).forEach( menuItem => {
+      menuItem.addEventListener("click", (e) => {
+        e.preventDefault()
+        console.log("Button click")
+        var selectedMonth = parseInt(e.target.dataset.month) || 0
+        CURRENT_SELECTED_MONTH = selectedMonth
+
+        var displayText = ""
+        switch(CURRENT_SELECTED_MONTH){
+          case 1:
+            displayText = "January"
+          break
+          case 2:
+            displayText = "February"
+          break
+          case 3:
+            displayText = "March"
+          break
+          case 4:
+            displayText = "April"
+          break
+          case 5:
+            displayText = "May"
+          break
+          case 6:
+            displayText = "June"
+          break
+          case 7:
+            displayText = "July"
+          break
+          case 8:
+            displayText = "August"
+          break
+          case 9:
+            displayText = "September"
+          break
+          case 10:
+            displayText = "October"
+          break
+          case 11:
+            displayText = "November"
+          break
+          case 12:
+            displayText = "December"
+          break
+          default:
+            displayText = "Month"
+          break
+        }
+        document.querySelector("#month-selector-btn-text").innerHTML = displayText
+        validateForm()
+        clearResults()
+      })
+    })
+    document.querySelector("#go-btn").addEventListener("click", (e) => {
+      e.preventDefault()
+
+      clearResults()
+      document.querySelector("#go-btn").disabled = true
+      document.querySelector("#loading-spinner").classList.add("is-active")
+
+      var numCountries = Math.floor(document.querySelector("#number-of-countries-input").value)
+      var year = Math.floor(document.querySelector("#year-selector-input").value)
+      var countries = []
+      var prng = new Math.seedrandom(`${CURRENT_SELECTED_MONTH}_${year}`)  
+
+      setTimeout(function(){
+        for (var i = 0; i < numCountries; i++){
+          var nextCountryIndex = Math.abs(prng.int32()) % ALL_COUNTRIES.length
+          countries.push(ALL_COUNTRIES[nextCountryIndex])
+        }
+        showResults(countries)
+
+        document.querySelector("#go-btn").disabled = false
+        document.querySelector("#loading-spinner").classList.remove("is-active")
+      },500)
+    })
+    document.querySelector("#clear-btn").addEventListener("click", (e) => {
+      e.preventDefault()
+      clearResults()
+    })
     </script>
   </body>
 </html>

@@ -32,6 +32,10 @@ h1{
   width: 100px;
 }
 
+#year-selector-container{
+  width: 70px;
+}
+
 header{
   margin-bottom:50px;
 }
