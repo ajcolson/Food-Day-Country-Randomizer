@@ -43,14 +43,16 @@
     <script>
     document.querySelector("#go-btn").addEventListener("click", (e) => {
       e.preventDefault()
+      
       clearResults()
       document.querySelector("#go-btn").disabled = true
       document.querySelector("#loading-spinner").classList.add("is-active")
+
+      var numCountries = Math.floor(document.querySelector("#number-of-countries-input").value)
+      var countries = []
+      var prng = new Math.seedrandom("This is a test seed.")  
+
       setTimeout(function(){
-        var numCountries = Math.floor(document.querySelector("#number-of-countries-input").value)
-        var countries = []
-        var prng = new Math.seedrandom("This is a test seed.")
-        
         for (var i = 0; i < numCountries; i++){
           var nextCountryIndex = Math.abs(prng.int32()) % ALL_COUNTRIES.length
           countries.push(ALL_COUNTRIES[nextCountryIndex])
