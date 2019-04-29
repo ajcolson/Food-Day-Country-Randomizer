@@ -7,19 +7,90 @@
     <script src="./res/mdl/material.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue-red.min.css" />
     <link rel="stylesheet" href="./res/css/style.css">
   </head>
   <body>
     <div class="mdl-grid">
-      <div class="mdl-cell mdl-cell--3-col"></div>
-      <div id="app-main--outer-box" class="mdl-cell mdl-cell--6-col mdl-cell--middle">
+      <div class="mdl-cell mdl-cell--2-col"></div>
+      <div id="app-main--outer-box" class="mdl-cell mdl-cell--8-col mdl-cell--middle">
         <div id="app-main--inner-box">
-          <h1><img class="logo-img" src="./res/images/favicon.png"> Food Day Country Randomizer</h1>
-          This is the main content. More coming soon...
+          <header>
+            <h1>
+              <img class="logo-img" src="./res/images/favicon.png"> Food Day Country Randomizer
+            </h1>
+          </header>
+          <form id="main-app-form" action="#">
+            I'd like to have a list with
+            <div id="number-of-countries-container" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="number-of-countries-input">
+              <label class="mdl-textfield__label" for="number-of-countries-input">Number of</label>
+              <span class="mdl-textfield__error">Not a Number!</span>
+            </div> countries.
+            <br>
+            <br>
+            <button id="go-btn" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" disabled>Go</button>
+            <button id="clear-btn" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>Clear Results</button>
+            <div id="loading-spinner" class="mdl-spinner mdl-js-spinner"></div>
+          </form>
+          <ul id="country-output-list" class="mdl-list"></ul>  
         </div>
       </div>
-      <div class="mdl-cell mdl-cell--3-col"></div>
+      <div class="mdl-cell mdl-cell--2-col"></div>
     </div>
     <script src="./res/js/country_lists.js"></script>
+    <script src="./res/js/prng.js"></script>
+    <script>
+    document.querySelector("#go-btn").addEventListener("click", (e) => {
+      e.preventDefault()
+      clearResults()
+      document.querySelector("#go-btn").disabled = true
+      document.querySelector("#loading-spinner").classList.add("is-active")
+      setTimeout(function(){
+        var numCountries = Math.floor(document.querySelector("#number-of-countries-input").value)
+        var countries = []
+        var prng = new Math.seedrandom("This is a test seed.")
+        
+        for (var i = 0; i < numCountries; i++){
+          var nextCountryIndex = Math.abs(prng.int32()) % ALL_COUNTRIES.length
+          countries.push(ALL_COUNTRIES[nextCountryIndex])
+        }
+        showResults(countries)
+
+        document.querySelector("#go-btn").disabled = false
+        document.querySelector("#loading-spinner").classList.remove("is-active")
+      },500)
+    })
+    document.querySelector("#number-of-countries-input").addEventListener("input", (e) => {
+      var val = document.querySelector("#number-of-countries-input").value
+      var isNum = val == "" || isNaN(val)
+      document.querySelector("#go-btn").disabled = isNum
+    })
+    document.querySelector("#clear-btn").addEventListener("click", (e) => {
+      e.preventDefault()
+      clearResults()
+    })
+
+    function clearResults(){
+      document.querySelector("#country-output-list").innerHTML = ""
+      document.querySelector("#clear-btn").disabled = true
+    }
+
+    function showResults(locations){
+      outString = ""
+      for (var ind in locations){
+        outString += `
+        <li class="mdl-list__item">
+          <span class="mdl-list__item-primary-content">
+            <i class="material-icons mdl-list__item-icon">place</i>
+            ${locations[ind]}
+            </span>
+        </li>
+        `
+      }
+      document.querySelector("#country-output-list").innerHTML = outString
+      document.querySelector("#clear-btn").disabled = false
+    }
+    </script>
   </body>
 </html>

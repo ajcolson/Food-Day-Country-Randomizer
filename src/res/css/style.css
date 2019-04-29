@@ -2,6 +2,7 @@ body{
   background: url('../images/food.png') repeat;
   font-family: 'PT Mono', monospace;
   color: #030303CC;
+  font-size: 18px;
 }
 
 #app-main--outer-box{
@@ -25,4 +26,21 @@ h1{
   width: 96px;
   height: 96px;
   vertical-align: middle;
+}
+
+#number-of-countries-container{
+  width: 100px;
+}
+
+header{
+  margin-bottom:50px;
+}
+
+#main-app-form{
+  padding: 25px 45px;
+}
+
+#loading-spinner{
+  vertical-align: middle;
+  margin-left: 10px;
 }
