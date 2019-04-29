@@ -87,16 +87,17 @@
     }
     function validateForm(){
       var countriesCountEntered = document.querySelector("#number-of-countries-input").value
-      var isCountriesEnteredValid = countriesCountEntered == "" || isNaN(countriesCountEntered)
+      var isCountriesEnteredValid = countriesCountEntered != "" && !isNaN(countriesCountEntered)
 
       var yearEntered = document.querySelector("#year-selector-input").value
-      var isYearEnteredValid = yearEntered == "" || isNaN(yearEntered) || yearEntered < 1000
+      var yearRegex = RegExp('[0-9]{4,}', 'g')
+      var isYearEnteredValid = yearEntered != "" && !isNaN(yearEntered) && yearRegex.test(yearEntered)
 
       var isMonthSelectedValid = (CURRENT_SELECTED_MONTH > 0) && (CURRENT_SELECTED_MONTH < 13)
 
       var isFormValid = isCountriesEnteredValid && isYearEnteredValid && isMonthSelectedValid
-
-      document.querySelector("#go-btn").disabled = isFormValid
+      
+      document.querySelector("#go-btn").disabled = !isFormValid
     }
 
     /** Main App Logic **/    
@@ -113,7 +114,6 @@
     Array.from(monthSelectorItems).forEach( menuItem => {
       menuItem.addEventListener("click", (e) => {
         e.preventDefault()
-        console.log("Button click")
         var selectedMonth = parseInt(e.target.dataset.month) || 0
         CURRENT_SELECTED_MONTH = selectedMonth
 
@@ -172,7 +172,7 @@
       document.querySelector("#loading-spinner").classList.add("is-active")
 
       var numCountries = Math.floor(document.querySelector("#number-of-countries-input").value)
-      var year = Math.floor(document.querySelector("#year-selector-input").value)
+      var year = document.querySelector("#year-selector-input").value
       var countries = []
       var prng = new Math.seedrandom(`${CURRENT_SELECTED_MONTH}_${year}`)  
 
