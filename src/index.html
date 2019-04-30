@@ -49,6 +49,46 @@
               <span class="mdl-textfield__error">Invalid Year!</span>
             </div>
             <br>
+            <label id="enable-rules-switch-container" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="enable-rules-switch">
+              <input type="checkbox" id="enable-rules-switch" class="mdl-switch__input" checked>
+              <span class="mdl-switch__label">Enable Custom Rules</span>
+            </label>     
+            <div id="rules-list-container">
+              <ul id="rules-list" class="mdl-list">
+                <span class="rule-header">Require at least one country from:</span>
+                <li class="mdl-list__item">
+                  <span class="mdl-list__item-primary-content">
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-europe-switch">
+                      <input type="checkbox" id="require-europe-switch" class="mdl-switch__input">
+                      <span class="mdl-switch__label white-label">Europe</span>
+                    </label>
+                  </span>
+                </li>
+                <li class="mdl-list__item">
+                  <span class="mdl-list__item-primary-content">
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-asia-switch">
+                      <input type="checkbox" id="require-asia-switch" class="mdl-switch__input">
+                      <span class="mdl-switch__label white-label">Asia</span>
+                    </label>
+                  </span>
+                </li>
+                <li class="mdl-list__item">
+                  <span class="mdl-list__item-primary-content">
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-na-switch">
+                      <input type="checkbox" id="require-na-switch" class="mdl-switch__input">
+                      <span class="mdl-switch__label white-label">North America</span>
+                    </label>
+                  </span>
+                </li>
+                <span class="rule-header">Use a custom random seed:</span>
+                <br>
+                <div id="custom-seed-input-container" class="mdl-textfield mdl-js-textfield">
+                  <input class="mdl-textfield__input" type="text" id="custom-seed-input">
+                  <label class="mdl-textfield__label" for="custom-seed-input">Leave this blank to use the default seed...</label>
+                </div>
+              </ul>
+            </div>
+            <br>
             <br>
             <button id="go-btn" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" disabled>Go</button>
             <button id="clear-btn" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>Clear Results</button>
@@ -64,6 +104,7 @@
     <script>
     /** Global Vars **/
     var CURRENT_SELECTED_MONTH = 0
+    var RULES_ENABLED =  document.querySelector("#enable-rules-switch").checked;
 
     /** Helper Functions **/
     function clearResults(){
@@ -164,6 +205,17 @@
         clearResults()
       })
     })
+    document.querySelector("#enable-rules-switch-container").addEventListener("click", (e) => {
+      RULES_ENABLED = document.querySelector("#enable-rules-switch").checked
+      if (RULES_ENABLED){
+        document.querySelector("#rules-list-container").classList.add("expand-frame")
+        document.querySelector("#rules-list-container").classList.remove("retract-frame")
+      } else {
+        document.querySelector("#rules-list-container").classList.add("retract-frame")
+        document.querySelector("#rules-list-container").classList.remove("expand-frame")
+      }
+    })
+
     document.querySelector("#go-btn").addEventListener("click", (e) => {
       e.preventDefault()
 
