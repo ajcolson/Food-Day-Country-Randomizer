@@ -172,14 +172,22 @@
       document.querySelector("#loading-spinner").classList.add("is-active")
 
       var numCountries = Math.floor(document.querySelector("#number-of-countries-input").value)
+      if (numCountries > ALL_COUNTRIES.length)
+        numCountries = ALL_COUNTRIES.length
       var year = document.querySelector("#year-selector-input").value
       var countries = []
-      var prng = new Math.seedrandom(`${CURRENT_SELECTED_MONTH}_${year}`)  
+      var prng = new Math.seedrandom(`${CURRENT_SELECTED_MONTH}${year}`)  
 
       setTimeout(function(){
         for (var i = 0; i < numCountries; i++){
-          var nextCountryIndex = Math.abs(prng.int32()) % ALL_COUNTRIES.length
-          countries.push(ALL_COUNTRIES[nextCountryIndex])
+          var nextCountryIndex = 0
+          var nextCountryName = ""
+          do {
+            nextCountryIndex = Math.abs(prng.int32()) % ALL_COUNTRIES.length
+            nextCountryName = ALL_COUNTRIES[nextCountryIndex]
+          } while (countries.includes(nextCountryName))
+          
+          countries.push(nextCountryName)
         }
         showResults(countries)
 
