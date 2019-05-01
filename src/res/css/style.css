@@ -1,6 +1,6 @@
 
 :root{
-  --custom-rules-height: 315px;
+  --custom-rules-height: 750px;
 }
 
 body{
@@ -69,6 +69,8 @@ header{
 
 #custom-seed-input-container{
   width: 450px;
+  display: inline-block;
+  margin: 0;
 }
 
 
@@ -107,4 +109,22 @@ header{
 
 .retract-frame{
   animation: 0.5s ease-in-out normal forwards retractAnimation;
+}
+
+.no-top-margin{
+  margin-top:0;
+  padding-top:0;
+}
+
+.no-bottom-margin{
+  margin-bottom:0;
+  padding-bottom:0;
+}
+
+.show-overflow{
+  overflow: visible !important;
+}
+
+#exclude-countries-input{
+  width: 300px;
 }

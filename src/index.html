@@ -7,8 +7,13 @@
     <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
     <link rel="stylesheet" href="./res/mdl/material.min.css">
     <link rel="stylesheet" href="./res/mdl/material.blue-red.min.css" />
+    <link rel="stylesheet" href="./res/awesomeplete/awesomplete.css" />
     <link rel="stylesheet" href="./res/css/style.css">
+    
     <script src="./res/mdl/material.min.js"></script>
+    <script src="./res/js/country_lists.js"></script>
+    <script src="./res/js/prng.js"></script>
+    <script src="./res/awesomeplete/awesomplete.min.js"></script>
   </head>
   <body>
     <div class="mdl-grid">
@@ -55,12 +60,16 @@
             </label>     
             <div id="rules-list-container">
               <ul id="rules-list" class="mdl-list">
-                <span class="rule-header">Require at least one country from:</span>
                 <li class="mdl-list__item">
                   <span class="mdl-list__item-primary-content">
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-europe-switch">
-                      <input type="checkbox" id="require-europe-switch" class="mdl-switch__input">
-                      <span class="mdl-switch__label white-label">Europe</span>
+                    <span class="rule-header">Include at least one country from:</span>
+                  </span>
+                </li>
+                <li class="mdl-list__item">
+                  <span class="mdl-list__item-primary-content">
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-africa-switch">
+                      <input type="checkbox" id="require-africa-switch" class="mdl-switch__input">
+                      <span class="mdl-switch__label white-label">Africa</span>
                     </label>
                   </span>
                 </li>
@@ -74,18 +83,75 @@
                 </li>
                 <li class="mdl-list__item">
                   <span class="mdl-list__item-primary-content">
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-europe-switch">
+                      <input type="checkbox" id="require-europe-switch" class="mdl-switch__input">
+                      <span class="mdl-switch__label white-label">Europe</span>
+                    </label>
+                  </span>
+                </li>
+                <li class="mdl-list__item">
+                  <span class="mdl-list__item-primary-content">
                     <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-na-switch">
                       <input type="checkbox" id="require-na-switch" class="mdl-switch__input">
                       <span class="mdl-switch__label white-label">North America</span>
                     </label>
                   </span>
                 </li>
-                <span class="rule-header">Use a custom random seed:</span>
-                <br>
-                <div id="custom-seed-input-container" class="mdl-textfield mdl-js-textfield">
-                  <input class="mdl-textfield__input" type="text" id="custom-seed-input">
-                  <label class="mdl-textfield__label" for="custom-seed-input">Leave this blank to use the default seed...</label>
-                </div>
+                <li class="mdl-list__item">
+                  <span class="mdl-list__item-primary-content">
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-oceania-switch">
+                      <input type="checkbox" id="require-oceania-switch" class="mdl-switch__input">
+                      <span class="mdl-switch__label white-label">Oceania</span>
+                    </label>
+                  </span>
+                </li>
+                <li class="mdl-list__item">
+                  <span class="mdl-list__item-primary-content">
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-sa-switch">
+                      <input type="checkbox" id="require-sa-switch" class="mdl-switch__input">
+                      <span class="mdl-switch__label white-label">South America</span>
+                    </label>
+                  </span>
+                </li>
+                <li class="mdl-list__item no-bottom-margin">
+                  <span class="mdl-list__item-primary-content">
+                    <span class="rule-header">Exclude the following countries:</span>
+                  </span>
+                </li>
+                <li class="mdl-list__item no-top-margin no-bottom-margin show-overflow">
+                  <span class="mdl-list__item-primary-content">
+                    <div id="exclude-countries-input-container" class="mdl-textfield mdl-js-textfield">
+                      <input class="mdl-textfield__input" type="text" id="exclude-countries-input">
+                      <label class="mdl-textfield__label" for="exclude-countries-input">Type the name of a country here...</label>
+                      <button id="exclude-counties-add-btn" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" disabled>
+                        <i class="material-icons">add</i>
+                      </button>
+                    </div>
+                  </span>
+                </li>
+                <li class="mdl-list__item no-top-margin">
+                  <span class="mdl-list__item-primary-content">
+                    <div id="exclude-counties-chips">
+                      <span data-country="United States" class="mdl-chip mdl-chip--deletable">
+                        <span class="mdl-chip__text">United States</span>
+                        <button type="button" class="mdl-chip__action"><i class="material-icons">cancel</i></button>
+                      </span>
+                    </div>
+                  </span>
+                </li>
+                <li class="mdl-list__item no-bottom-margin">
+                  <span class="mdl-list__item-primary-content">
+                    <span class="rule-header">Use a custom random seed:</span>
+                  </span>
+                </li>
+                <li class="mdl-list__item no-top-margin">
+                  <span class="mdl-list__item-primary-content">
+                    <div id="custom-seed-input-container" class="mdl-textfield mdl-js-textfield">
+                      <input class="mdl-textfield__input" type="text" id="custom-seed-input">
+                      <label class="mdl-textfield__label" for="custom-seed-input">Leave this blank to use the default seed...</label>
+                    </div>
+                  </span>
+                </li>
               </ul>
             </div>
             <br>
@@ -99,14 +165,26 @@
       </div>
       <div class="mdl-cell mdl-cell--2-col"></div>
     </div>
-    <script src="./res/js/country_lists.js"></script>
-    <script src="./res/js/prng.js"></script>
     <script>
+    /**SOME INIT CODE**/
+    var countriesAutocomplete = new Awesomplete(document.querySelector("#exclude-countries-input"))
+    countriesAutocomplete.list = ALL_COUNTRIES
+
+
     /** Global Vars **/
     var CURRENT_SELECTED_MONTH = 0
     var RULES_ENABLED =  document.querySelector("#enable-rules-switch").checked;
+    var EXCLUDED_COUNTRIES = ["United States"]
 
     /** Helper Functions **/
+    function addCountryToBeExcluded(countryName){
+      if (!ALL_COUNTRIES.includes(countryName) || EXCLUDED_COUNTRIES.includes(countryName))
+        return false
+      EXCLUDED_COUNTRIES.push(countryName)
+
+
+    }
+    function removeCountryToBeExcluded(countryName){}
     function clearResults(){
       document.querySelector("#country-output-list").innerHTML = ""
       document.querySelector("#clear-btn").disabled = true
@@ -140,8 +218,19 @@
       
       document.querySelector("#go-btn").disabled = !isFormValid
     }
+    function validateExcludeCountryInput(){
+      var excludeCountryText = document.querySelector("#exclude-countries-input").value
+      document.querySelector("#exclude-counties-add-btn").disabled = !ALL_COUNTRIES.includes(excludeCountryText)
+    }
 
-    /** Main App Logic **/    
+    /** Main App Logic **/
+    document.addEventListener("click", (e) => {
+      validateExcludeCountryInput()
+    })
+
+    document.querySelector("#main-app-form").addEventListener("submit", (e) => {
+      e.preventDefault()
+    })    
     document.querySelector("#number-of-countries-input").addEventListener("input", (e) => {
       validateForm()
       clearResults()
@@ -215,7 +304,15 @@
         document.querySelector("#rules-list-container").classList.remove("expand-frame")
       }
     })
-
+    document.querySelector("#exclude-countries-input").addEventListener("change", (e) => {
+      validateExcludeCountryInput()
+    })
+    document.querySelector("#exclude-countries-input").addEventListener("input", (e) => {
+      validateExcludeCountryInput()
+    })
+    document.querySelector("#exclude-countries-input").addEventListener("click", (e) => {
+      validateExcludeCountryInput()
+    })
     document.querySelector("#go-btn").addEventListener("click", (e) => {
       e.preventDefault()
 
