@@ -123,7 +123,7 @@
                     <div id="exclude-countries-input-container" class="mdl-textfield mdl-js-textfield">
                       <input class="mdl-textfield__input" type="text" id="exclude-countries-input">
                       <label class="mdl-textfield__label" for="exclude-countries-input">Type the name of a country here...</label>
-                      <button id="exclude-counties-add-btn" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" disabled>
+                      <button id="exclude-countries-add-btn" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" disabled>
                         <i class="material-icons">add</i>
                       </button>
                     </div>
@@ -131,7 +131,7 @@
                 </li>
                 <li class="mdl-list__item no-top-margin">
                   <span class="mdl-list__item-primary-content">
-                    <div id="exclude-counties-chips">
+                    <div id="exclude-countries-chips">
                       <span data-country="United States" class="mdl-chip mdl-chip--deletable">
                         <span class="mdl-chip__text">United States</span>
                         <button type="button" class="mdl-chip__action"><i class="material-icons">cancel</i></button>
@@ -182,9 +182,24 @@
         return false
       EXCLUDED_COUNTRIES.push(countryName)
 
-
+      var newChipText = `
+      <span data-country="${countryName}" class="mdl-chip mdl-chip--deletable">
+        <span class="mdl-chip__text">${countryName}</span>
+        <button type="button" class="mdl-chip__action"><i class="material-icons">cancel</i></button>
+      </span>
+      `
+      document.querySelector("#exclude-countries-chips").innerHTML += newChipText
+      return true
     }
-    function removeCountryToBeExcluded(countryName){}
+    function removeCountryToBeExcluded(countryName){
+      if (!ALL_COUNTRIES.includes(countryName) || !EXCLUDED_COUNTRIES.includes(countryName))
+        return false
+      indexOfCountryName = EXCLUDED_COUNTRIES.indexOf(countryName)
+      EXCLUDED_COUNTRIES.splice(indexOfCountryName,1)
+      var chipToRemove = document.querySelector(`.mdl-chip[data-country="${countryName}"`)
+      chipToRemove.parentNode.removeChild(chipToRemove)
+      return true
+    }
     function clearResults(){
       document.querySelector("#country-output-list").innerHTML = ""
       document.querySelector("#clear-btn").disabled = true
@@ -220,11 +235,14 @@
     }
     function validateExcludeCountryInput(){
       var excludeCountryText = document.querySelector("#exclude-countries-input").value
-      document.querySelector("#exclude-counties-add-btn").disabled = !ALL_COUNTRIES.includes(excludeCountryText)
+      document.querySelector("#exclude-countries-add-btn").disabled = !ALL_COUNTRIES.includes(excludeCountryText)
     }
 
     /** Main App Logic **/
     document.addEventListener("click", (e) => {
+
+      console.log(e.target)
+
       validateExcludeCountryInput()
     })
 
@@ -313,6 +331,13 @@
     document.querySelector("#exclude-countries-input").addEventListener("click", (e) => {
       validateExcludeCountryInput()
     })
+    document.querySelector("#exclude-countries-add-btn").addEventListener("click", (e)=>{
+      var countryName = document.querySelector("#exclude-countries-input").value
+      var success = addCountryToBeExcluded(countryName)
+      if (success)
+        document.querySelector("#exclude-countries-input").value = ""
+    })
+
     document.querySelector("#go-btn").addEventListener("click", (e) => {
       e.preventDefault()
 

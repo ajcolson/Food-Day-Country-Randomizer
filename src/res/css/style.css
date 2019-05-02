@@ -128,3 +128,7 @@ header{
 #exclude-countries-input{
   width: 300px;
 }
+
+#exclude-countries-add-btn{
+  margin-left: 300px;
+}
