@@ -1,0 +1,134 @@
+
+:root{
+  --custom-rules-height: 750px;
+}
+
+body{
+  background: url('../images/food.png') repeat;
+  font-family: 'PT Mono', monospace;
+  color: #030303CC;
+  font-size: 18px;
+  text-shadow: 1px 1px 1px #ccc;
+}
+
+#app-main--outer-box{
+  background: #FFFFFF99;
+  border-radius: 10px;
+  min-height: 200px;
+  padding: 10px;
+}
+
+#app-main--inner-box{
+  background: #FFFFFFEE;
+  min-height: 200px;
+  border-radius: 5px;
+  padding:5px;
+}
+
+h1{
+  text-align: center;
+}
+.logo-img{
+  width: 96px;
+  height: 96px;
+  vertical-align: middle;
+}
+
+#number-of-countries-container{
+  width: 100px;
+}
+
+#year-selector-container{
+  width: 70px;
+}
+
+header{
+  margin-bottom:50px;
+}
+
+#main-app-form{
+  padding: 25px 45px;
+}
+
+#loading-spinner{
+  vertical-align: middle;
+  margin-left: 10px;
+}
+#rules-list-container{
+  background: #e5e5e599;
+  border: thin #656565 solid;
+  margin-top: 5px;
+  overflow: hidden;
+  height: var(--custom-rules-height);
+  padding-left: 20px;
+}
+.rule-header{
+  font-size: 18px;
+  text-decoration: underline;
+}
+
+#custom-seed-input-container{
+  width: 450px;
+  display: inline-block;
+  margin: 0;
+}
+
+
+@keyframes expandAnimation{
+  from {
+    height: 0;
+    opacity: 0;
+    border: none;
+  }
+  to {
+    height: var(--custom-rules-height);
+    opacity: 1;
+    border: thin #656565 solid;
+  }
+}
+
+@keyframes retractAnimation{
+  from {
+    height: var(--custom-rules-height);
+    opacity: 1;
+    border: thin #656565 solid;
+  }
+  5%{
+    border:none;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+    border: none;
+  }
+}
+
+.expand-frame{
+  animation: 0.7s ease-in-out normal forwards expandAnimation;
+}
+
+.retract-frame{
+  animation: 0.5s ease-in-out normal forwards retractAnimation;
+}
+
+.no-top-margin{
+  margin-top:0;
+  padding-top:0;
+}
+
+.no-bottom-margin{
+  margin-bottom:0;
+  padding-bottom:0;
+}
+
+.show-overflow{
+  overflow: visible !important;
+}
+
+#exclude-countries-input{
+  width: 300px;
+}
+
+#exclude-countries-add-btn{
+  margin-left: 300px;
+}
