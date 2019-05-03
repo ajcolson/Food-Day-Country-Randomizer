@@ -67,7 +67,7 @@
                 </li>
                 <li class="mdl-list__item">
                   <span class="mdl-list__item-primary-content">
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-africa-switch">
+                    <label id="require-africa-switch-container" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-africa-switch">
                       <input type="checkbox" id="require-africa-switch" class="mdl-switch__input">
                       <span class="mdl-switch__label white-label">Africa</span>
                     </label>
@@ -75,7 +75,7 @@
                 </li>
                 <li class="mdl-list__item">
                   <span class="mdl-list__item-primary-content">
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-asia-switch">
+                    <label id="require-asia-switch-container" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-asia-switch">
                       <input type="checkbox" id="require-asia-switch" class="mdl-switch__input">
                       <span class="mdl-switch__label white-label">Asia</span>
                     </label>
@@ -83,7 +83,7 @@
                 </li>
                 <li class="mdl-list__item">
                   <span class="mdl-list__item-primary-content">
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-europe-switch">
+                    <label id="require-europe-switch-container" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-europe-switch">
                       <input type="checkbox" id="require-europe-switch" class="mdl-switch__input">
                       <span class="mdl-switch__label white-label">Europe</span>
                     </label>
@@ -91,7 +91,7 @@
                 </li>
                 <li class="mdl-list__item">
                   <span class="mdl-list__item-primary-content">
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-na-switch">
+                    <label id="require-na-switch-container" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-na-switch">
                       <input type="checkbox" id="require-na-switch" class="mdl-switch__input">
                       <span class="mdl-switch__label white-label">North America</span>
                     </label>
@@ -99,7 +99,7 @@
                 </li>
                 <li class="mdl-list__item">
                   <span class="mdl-list__item-primary-content">
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-oceania-switch">
+                    <label id="require-oceania-switch-container" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-oceania-switch">
                       <input type="checkbox" id="require-oceania-switch" class="mdl-switch__input">
                       <span class="mdl-switch__label white-label">Oceania</span>
                     </label>
@@ -107,7 +107,7 @@
                 </li>
                 <li class="mdl-list__item">
                   <span class="mdl-list__item-primary-content">
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-sa-switch">
+                    <label id="require-sa-switch-container" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="require-sa-switch">
                       <input type="checkbox" id="require-sa-switch" class="mdl-switch__input">
                       <span class="mdl-switch__label white-label">South America</span>
                     </label>
@@ -173,8 +173,19 @@
 
     /** Global Vars **/
     var CURRENT_SELECTED_MONTH = 0
-    var RULES_ENABLED =  document.querySelector("#enable-rules-switch").checked;
+    var RULES_ENABLED =  document.querySelector("#enable-rules-switch").checked
     var EXCLUDED_COUNTRIES = ["United States"]
+    var SHOULD_INCLUDE = {
+      AFRICA: document.querySelector("#require-africa-switch").checked,
+      ASIA: document.querySelector("#require-asia-switch").checked,
+      EUROPE: document.querySelector("#require-europe-switch").checked,
+      NA: document.querySelector("#require-na-switch").checked,
+      OCEANIA:document.querySelector("#require-oceania-switch").checked,
+      SA:document.querySelector("#require-sa-switch").checked
+    }
+    var PRNG = null
+    var PRNG_SEED = "seed-default-value"
+    var GENERATED_COUNTRIES = []
 
     /** Helper Functions **/
     function addCountryToBeExcluded(countryName){
@@ -199,19 +210,72 @@
       var chipToRemove = document.querySelector(`.mdl-chip[data-country="${countryName}"`)
       chipToRemove.parentNode.removeChild(chipToRemove)
       return true
+    }    
+    function GenerateNextCountry(fromContinent = "ALL"){
+      //debugger
+      var nextCountryIndex = 0
+      var nextCountryName = ""
+      var nextCountryIsOkToUse = false
+      do {
+        switch(fromContinent){
+          case "AFRICA":
+            nextCountryIndex = Math.abs(PRNG.int32()) % ALL_COUNTRIES_IN_AFRICA.length
+            nextCountryName = ALL_COUNTRIES_IN_AFRICA[nextCountryIndex]
+          break
+          case "ASIA":
+            nextCountryIndex = Math.abs(PRNG.int32()) % ALL_COUNTRIES_IN_ASIA.length
+            nextCountryName = ALL_COUNTRIES_IN_ASIA[nextCountryIndex]
+          break
+          case "EUROPE":
+            nextCountryIndex = Math.abs(PRNG.int32()) % ALL_COUNTRIES_IN_EUROPE.length
+            nextCountryName = ALL_COUNTRIES_IN_EUROPE[nextCountryIndex]
+          break
+          case "NA":
+            nextCountryIndex = Math.abs(PRNG.int32()) % ALL_COUNTRIES_IN_NA.length
+            nextCountryName = ALL_COUNTRIES_IN_NA[nextCountryIndex]
+          break
+          case "OCEANIA":
+            nextCountryIndex = Math.abs(PRNG.int32()) % ALL_COUNTRIES_IN_OCEANIA.length
+            nextCountryName = ALL_COUNTRIES_IN_OCEANIA[nextCountryIndex]
+          break
+          case "SA":
+            nextCountryIndex = Math.abs(PRNG.int32()) % ALL_COUNTRIES_IN_SA.length
+            nextCountryName = ALL_COUNTRIES_IN_SA[nextCountryIndex]
+          break
+          default:
+            nextCountryIndex = Math.abs(PRNG.int32()) % ALL_COUNTRIES.length
+            nextCountryName = ALL_COUNTRIES[nextCountryIndex]
+          break
+        }      
+        nextCountryIsOkToUse = false
+
+        if (!GENERATED_COUNTRIES.includes(nextCountryName)){
+          if (RULES_ENABLED){
+            if (EXCLUDED_COUNTRIES.indexOf(nextCountryName) === -1){
+              nextCountryIsOkToUse = true
+            }
+          } else {
+            nextCountryIsOkToUse = true
+          }
+        }
+
+      } while (!nextCountryIsOkToUse)
+      
+      return nextCountryName
     }
     function clearResults(){
       document.querySelector("#country-output-list").innerHTML = ""
       document.querySelector("#clear-btn").disabled = true
+      GENERATED_COUNTRIES = []
     }
-    function showResults(locations){
+    function showResults(){
       outString = ""
-      for (var ind in locations){
+      for (var ind in GENERATED_COUNTRIES){
         outString += `
         <li class="mdl-list__item">
           <span class="mdl-list__item-primary-content">
             <i class="material-icons mdl-list__item-icon">place</i>
-            ${locations[ind]}
+            ${GENERATED_COUNTRIES[ind]}
             </span>
         </li>
         `
@@ -241,7 +305,14 @@
     /** Main App Logic **/
     document.addEventListener("click", (e) => {
 
-      console.log(e.target)
+      
+      if (e.target.parentNode.className.includes("mdl-chip__action")){
+        if (e.target.parentNode.parentNode.dataset.country !== undefined){
+          var countryToRemove = e.target.parentNode.parentNode.dataset.country
+          removeCountryToBeExcluded(countryToRemove)
+        }
+      }
+        
 
       validateExcludeCountryInput()
     })
@@ -337,6 +408,24 @@
       if (success)
         document.querySelector("#exclude-countries-input").value = ""
     })
+    document.querySelector("#require-africa-switch-container").addEventListener("click", (e) => {
+      SHOULD_INCLUDE.AFRICA = document.querySelector("#require-africa-switch").checked
+    })
+    document.querySelector("#require-asia-switch-container").addEventListener("click", (e) => {
+      SHOULD_INCLUDE.ASIA = document.querySelector("#require-asia-switch").checked
+    })
+    document.querySelector("#require-europe-switch-container").addEventListener("click", (e) => {
+      SHOULD_INCLUDE.EUROPE = document.querySelector("#require-europe-switch").checked
+    })
+    document.querySelector("#require-na-switch-container").addEventListener("click", (e) => {
+      SHOULD_INCLUDE.NA = document.querySelector("#require-na-switch").checked
+    })
+    document.querySelector("#require-oceania-switch-container").addEventListener("click", (e) => {
+      SHOULD_INCLUDE.OCEANIA = document.querySelector("#require-oceania-switch").checked
+    })
+    document.querySelector("#require-sa-switch-container").addEventListener("click", (e) => {
+      SHOULD_INCLUDE.SA = document.querySelector("#require-sa-switch").checked
+    })
 
     document.querySelector("#go-btn").addEventListener("click", (e) => {
       e.preventDefault()
@@ -349,21 +438,101 @@
       if (numCountries > ALL_COUNTRIES.length)
         numCountries = ALL_COUNTRIES.length
       var year = document.querySelector("#year-selector-input").value
-      var countries = []
-      var prng = new Math.seedrandom(`${CURRENT_SELECTED_MONTH}${year}`)  
+      PRNG_SEED = `${CURRENT_SELECTED_MONTH}${year}`
+      if (RULES_ENABLED && document.querySelector("#custom-seed-input").value !== "")
+        PRNG_SEED = document.querySelector("#custom-seed-input").value
+      PRNG = new Math.seedrandom(PRNG_SEED)
 
       setTimeout(function(){
         for (var i = 0; i < numCountries; i++){
-          var nextCountryIndex = 0
-          var nextCountryName = ""
-          do {
-            nextCountryIndex = Math.abs(prng.int32()) % ALL_COUNTRIES.length
-            nextCountryName = ALL_COUNTRIES[nextCountryIndex]
-          } while (countries.includes(nextCountryName))
-          
-          countries.push(nextCountryName)
+          var result = GenerateNextCountry()
+          GENERATED_COUNTRIES.push(result)
         }
-        showResults(countries)
+        
+        if (RULES_ENABLED){
+          var foundMath = false
+          var result = ""
+          if (SHOULD_INCLUDE.AFRICA){
+            foundMatch = false
+            for (countryIndex in GENERATED_COUNTRIES){
+              if (ALL_COUNTRIES_IN_AFRICA.includes(GENERATED_COUNTRIES[countryIndex])){
+                foundMatch = true
+                break
+              }
+            }
+            if(!foundMatch){
+              result = GenerateNextCountry("AFRICA")
+              GENERATED_COUNTRIES.push(result)
+            }
+          }
+          if (SHOULD_INCLUDE.ASIA){
+            foundMatch = false
+            for (countryIndex in GENERATED_COUNTRIES){
+              if (ALL_COUNTRIES_IN_ASIA.includes(GENERATED_COUNTRIES[countryIndex])){
+                foundMatch = true
+                break
+              }
+            }
+            if(!foundMatch){
+              result = GenerateNextCountry("ASIA")
+              GENERATED_COUNTRIES.push(result)
+            }
+          }
+          if (SHOULD_INCLUDE.EUROPE){
+            foundMatch = false
+            for (countryIndex in GENERATED_COUNTRIES){
+              if (ALL_COUNTRIES_IN_EUROPE.includes(GENERATED_COUNTRIES[countryIndex])){
+                foundMatch = true
+                break
+              }
+            }
+            if(!foundMatch){
+              result = GenerateNextCountry("EUROPE")
+              GENERATED_COUNTRIES.push(result)
+            }
+          }
+          if (SHOULD_INCLUDE.NA){
+            foundMatch = false
+            for (countryIndex in GENERATED_COUNTRIES){
+              if (ALL_COUNTRIES_IN_NA.includes(GENERATED_COUNTRIES[countryIndex])){
+                foundMatch = true
+                break
+              }
+            }
+            if(!foundMatch){
+              result = GenerateNextCountry("NA")
+              GENERATED_COUNTRIES.push(result)
+            }
+          }
+          if (SHOULD_INCLUDE.OCEANIA){
+            foundMatch = false
+            for (countryIndex in GENERATED_COUNTRIES){
+              if (ALL_COUNTRIES_IN_OCEANIA.includes(GENERATED_COUNTRIES[countryIndex])){
+                foundMatch = true
+                break
+              }
+            }
+            if(!foundMatch){
+              result = GenerateNextCountry("OCEANIA")
+              GENERATED_COUNTRIES.push(result)
+            }
+          }
+          if (SHOULD_INCLUDE.SA){
+            foundMatch = false
+            for (countryIndex in GENERATED_COUNTRIES){
+              if (ALL_COUNTRIES_IN_SA.includes(GENERATED_COUNTRIES[countryIndex])){
+                foundMatch = true
+                break
+              }
+            }
+            if(!foundMatch){
+              result = GenerateNextCountry("SA")
+              GENERATED_COUNTRIES.push(result)
+            }
+          }
+        }
+
+        showResults()
 
         document.querySelector("#go-btn").disabled = false
         document.querySelector("#loading-spinner").classList.remove("is-active")

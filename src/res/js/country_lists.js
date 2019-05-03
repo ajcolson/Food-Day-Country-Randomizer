@@ -2,9 +2,9 @@ var ALL_CONTINENTS = [
   "AFRICA",
   "ASIA",
   "EUROPE",
-  "NORTH AMERICA",
+  "NA",
   "OCEANIA",
-  "SOUTH AMERICA"
+  "SA"
 ]
 
 var ALL_COUNTRIES = [
@@ -358,7 +358,7 @@ var ALL_COUNTRIES_IN_EUROPE = [
   "Vatican City"
 ]
 
-var ALL_COUNTRIES_IN_NORTH_AMERICA = [
+var ALL_COUNTRIES_IN_NA = [
   "Antigua and Barbuda",
   "Bahamas",
   "Barbados",
@@ -401,7 +401,7 @@ var ALL_COUNTRIES_IN_OCEANIA = [
   "Vanuatu"
 ]
 
-var ALL_COUNTRIES_IN_SOUTH_AMERICA = [
+var ALL_COUNTRIES_IN_SA = [
   "Argentina",
   "Bolivia",
   "Brazil",
@@ -568,7 +568,7 @@ var ALL_COUNTRIES_BY_CONTINENT = {
     "United Kingdom",
     "Vatican City"
   ],  
-  "NORTH AMERICA": [
+  "NA": [
     "Antigua and Barbuda",
     "Bahamas",
     "Barbados",
@@ -609,7 +609,7 @@ var ALL_COUNTRIES_BY_CONTINENT = {
     "Tuvalu",
     "Vanuatu"
   ],
-  "SOUTH AMERICA": [
+  "SA": [
     "Argentina",
     "Bolivia",
     "Brazil",
