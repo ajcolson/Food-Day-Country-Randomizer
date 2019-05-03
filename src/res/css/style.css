@@ -6,20 +6,20 @@
 body{
   background: url('../images/food.png') repeat;
   font-family: 'PT Mono', monospace;
-  color: #030303CC;
+  color: rgba(3, 3, 3, 0.8);
   font-size: 18px;
   text-shadow: 1px 1px 1px #ccc;
 }
 
 #app-main--outer-box{
-  background: #FFFFFF99;
+  background: rgba(255, 255, 255, 0.6);;
   border-radius: 10px;
   min-height: 200px;
   padding: 10px;
 }
 
 #app-main--inner-box{
-  background: #FFFFFFEE;
+  background: rgba(255, 255, 255, 0.933);;
   min-height: 200px;
   border-radius: 5px;
   padding:5px;
@@ -55,8 +55,8 @@ header{
   margin-left: 10px;
 }
 #rules-list-container{
-  background: #e5e5e599;
-  border: thin #656565 solid;
+  background: rgba(229, 229, 229, 0.6);
+  border: thin rgb(101, 101, 101) solid;
   margin-top: 5px;
   overflow: hidden;
   height: var(--custom-rules-height);
